@@ -12,14 +12,16 @@
     <button atrrib="dog">dog</button>
     <button atrrib="cat">cat</button>
     <button atrrib="monkey">monkey</button>
+    <button atrrib="peacock">peacock</button>
     <div id="gifs-appear-here"></div>
 
     <script>
 
-
+        $("#gifs-appear-here").empty();
         $("button").on("click", function () {
-            var newday = $(this).attr("atrrib");
-            var queryURL = "http://api.giphy.com/v1/gifs/search?q=" + newday + "&api_key=kjGUPVuGwK96YN74E5UC8jNDNaeSYuUz&limit=5";
+            var topics = $(this).attr("atrrib");
+            var other_topics = $(this).attr("#hello");
+            var queryURL = "http://api.giphy.com/v1/gifs/search?q=" + topics + "&api_key=kjGUPVuGwK96YN74E5UC8jNDNaeSYuUz&limit=10";
             //ajax call
             $.ajax({
                 url: queryURL,
@@ -27,21 +29,20 @@
             })
                 .then(function (response) {
                     var results = response.data;
-
+                    console.log(results);
+                    $("#gifs-appear-here").empty();
                     for (var i = 0; i < results.length; i++) {
                         var gifDiv = $("<div>");
                         var rating = results[i].rating;
                         var p = $("<p>").text("Ratings: " + rating);
                         var personImage = $("<img>");
                         personImage.attr("src", results[i].images.fixed_height.url);
-
                         gifDiv.append(p);
                         gifDiv.append(personImage);
+                        var animalFarm = $("#gifs-appear-here").prepend(gifDiv);
+                        }
 
-                        $("#gifs-appear-here").prepend(gifDiv);
-                    }
-                
-            });
+                });
         });
     </script>
 </body>

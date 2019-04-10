@@ -17,11 +17,12 @@
         </div>
 
         <div class="row">
-            <button atrrib="fish" type="button" class="btn btn-secondary">Fish</button>
-            <button atrrib="dog" type="button" class="btn btn-secondary">Dog</button>
-            <button atrrib="cat" type="button" class="btn btn-secondary">Cat</button>
-            <button atrrib="monkey" type="button" class="btn btn-secondary">Monkey</button>
-            <button atrrib="peacock" type="button" class="btn btn-secondary">Peacock</button>
+            <button atrrib="fish" type="button" class="btn btn-secondary gif_button">Fish</button>
+            <button atrrib="dog" type="button" class="btn btn-secondary gif_button">Dog</button>
+            <button atrrib="cat" type="button" class="btn btn-secondary gif_button">Cat</button>
+            <button atrrib="monkey" type="button" class="btn btn-secondary gif_button">Monkey</button>
+            <button atrrib="peacock" type="button" class="btn btn-secondary gif_button">Peacock</button>
+            <div id="search_div"></div>
 
             <div class="input-group" id="giphy-form">
                 <input type="text" id="animal-input" class="form-control" placeholder="Search">
@@ -33,9 +34,19 @@
             <div id="gifs-appear-here"></div>
 
             <script>
+                $("#add-animal").on("click", function () {
+                    var input = $("#animal-input").val();
+                    console.log(input);
+                    var new_buttonz  = $("<button>");
+                    new_buttonz.addClass("gif_button");
+                    new_buttonz.addClass("btn btn-secondary");
+                    new_buttonz.attr("atrrib", input);
+                    new_buttonz.text(input);
+                    $("#search_div").append(new_buttonz);
 
+                });
                 $("#gifs-appear-here").empty();
-                $("button").on("click", function () {
+                $(".gif_button").on("click", function () {
                     var topics = $(this).attr("atrrib");
                     var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + topics + "&api_key=kjGUPVuGwK96YN74E5UC8jNDNaeSYuUz&limit=10";
                     //ajax call
@@ -74,7 +85,7 @@
                                         $(this).attr("data-state", "still");
                                     }
                                 });
-                                
+
                                 gifDiv.append(p);
                                 gifDiv.append(personImage);
                                 var animalFarm = $("#gifs-appear-here").prepend(gifDiv);

@@ -10,72 +10,83 @@
 </head>
 
 <body>
-    
-        <div class="container">
-            <div class="jumbotron">
-                <h1>Animal Jawns!</h1>
+
+    <div class="container">
+        <div class="jumbotron">
+            <h1>Animal Jawns!</h1>
+        </div>
+
+        <div class="row">
+            <button atrrib="fish" type="button" class="btn btn-secondary">Fish</button>
+            <button atrrib="dog" type="button" class="btn btn-secondary">Dog</button>
+            <button atrrib="cat" type="button" class="btn btn-secondary">Cat</button>
+            <button atrrib="monkey" type="button" class="btn btn-secondary">Monkey</button>
+            <button atrrib="peacock" type="button" class="btn btn-secondary">Peacock</button>
+
+            <div class="input-group" id="giphy-form">
+                <input type="text" id="animal-input" class="form-control" placeholder="Search">
+                <button class="btn btn-default" id="add-animal" type="button" value="submit">Add animal button</button>
+
+
             </div>
-            
-<div class="row">
-    <button atrrib="fish" type="button" class="btn btn-secondary">Fish</button>
-    <button atrrib="dog" type="button" class="btn btn-secondary">Dog</button>
-    <button atrrib="cat" type="button" class="btn btn-secondary">Cat</button>
-    <button atrrib="monkey" type="button" class="btn btn-secondary">Monkey</button>
-    <button atrrib="peacock" type="button" class="btn btn-secondary">Peacock</button>
 
-    <div class="input-group" id="giphy-form">
-        <input type="text" id="animal-input" class="form-control" placeholder="Search">
-        <button class="btn btn-default" id="add-animal" type="button" value="submit">Add animal button</button>
+            <div id="gifs-appear-here"></div>
 
-       
-    </div>
+            <script>
 
-        <div id="gifs-appear-here"></div>
+                $("#gifs-appear-here").empty();
+                $("button").on("click", function () {
+                    var topics = $(this).attr("atrrib");
+                    var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + topics + "&api_key=kjGUPVuGwK96YN74E5UC8jNDNaeSYuUz&limit=10";
+                    //ajax call
+                    $.ajax({
+                        url: queryURL,
+                        method: "GET"
+                    })
+                        .then(function (response) {
+                            var results = response.data;
+                            console.log(results);
+                            $("#gifs-appear-here").empty();
+                            for (var i = 0; i < results.length; i++) {
+                                var gifDiv = $("<div>");
+                                var rating = results[i].rating;
+                                var animated = response.data[i].images.fixed_height.url;
+                                var still = response.data[i].images.fixed_height_still.url;
+                                var p = $("<p>").text("Ratings: " + rating);
+                                var personImage = $("<img>");
+                                personImage.attr('src', still);
+                                personImage.attr('data-still', still);
+                                personImage.attr('data-animated', animated);
+                                personImage.attr('data-state', 'still');
 
-        <script>
+                                personImage.on("click", function () {
+                                    // The attr jQuery method allows us to get or set the value of any attribute on our HTML element
+                                    console.log(this)
+                                    var state = $(this).attr("data-state");
+                                    // If the clicked image's state is still, update its src attribute to what its data-animate value is.
+                                    // Then, set the image's data-state to animate
+                                    // Else set src to the data-still value
+                                    if (state === "still") {
+                                        $(this).attr("src", $(this).attr("data-animated"));
+                                        $(this).attr("data-state", "animated");
+                                    } else {
+                                        $(this).attr("src", $(this).attr("data-still"));
+                                        $(this).attr("data-state", "still");
+                                    }
+                                });
+                                
+                                gifDiv.append(p);
+                                gifDiv.append(personImage);
+                                var animalFarm = $("#gifs-appear-here").prepend(gifDiv);
 
-            $("#gifs-appear-here").empty();
-            $("button").on("click", function () {
-                var topics = $(this).attr("atrrib");
-                var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + topics + "&api_key=kjGUPVuGwK96YN74E5UC8jNDNaeSYuUz&limit=10";
-                //ajax call
-                $.ajax({
-                    url: queryURL,
-                    method: "GET"
-                })
-                    .then(function (response) {
-                        var results = response.data;
-                        console.log(results);
-                        $("#gifs-appear-here").empty();
-                        for (var i = 0; i < results.length; i++) {
-                            var gifDiv = $("<div>");
-                            var rating = results[i].rating;
-                            var animated = response.data[i].images.fixed_height.url;
-                            var still = response.data[i].images.fixed_height_still.url;
-                            var p = $("<p>").text("Ratings: " + rating);
-                            var personImage = $("<img>");
-                            personImage.attr('src', still);
-                            personImage.attr('data-still', still);
-                            personImage.attr('data-animated', animated);
-                            personImage.attr('data-state', 'still');
-                            var state = $(this).attr('data-state');
-                            if (state == "still") {
-                                personImage.attr("src", response.data[i].images.fixed_height_still.url);
-                            } else {
-                                personImage.attr("src", response.data[i].images.fixed_height.url);
+
+
+
                             }
-                            gifDiv.append(p);
-                            gifDiv.append(personImage);
-                            var animalFarm = $("#gifs-appear-here").prepend(gifDiv);
 
-
-
-
-                        }
-
-                    });
-            });
-        </script>
+                        });
+                });
+            </script>
 </body>
 
 </html>

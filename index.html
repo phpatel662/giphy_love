@@ -13,6 +13,13 @@
     <button atrrib="cat">cat</button>
     <button atrrib="monkey">monkey</button>
     <button atrrib="peacock">peacock</button>
+    <div class="input-group" id="giphy-form">
+        <input type="text" id="animal-input" class="form-control" placeholder="Search">
+        <button class="btn btn-default" id="add-animal" type="button" value="submit">Add animal button</button>
+
+    </div>
+
+
     <div id="gifs-appear-here"></div>
 
     <script>
@@ -34,13 +41,15 @@
                     for (var i = 0; i < results.length; i++) {
                         var gifDiv = $("<div>");
                         var rating = results[i].rating;
+                        var animated = response.data[i].images.fixed_height.url;
+                        var still = response.data[i].images.fixed_height_still.url;
                         var p = $("<p>").text("Ratings: " + rating);
                         var personImage = $("<img>");
-                        personImage.attr("src", results[i].images.fixed_height.url);
+                        personImage.attr("src", response.data[i].images.fixed_height_still.url);
                         gifDiv.append(p);
                         gifDiv.append(personImage);
                         var animalFarm = $("#gifs-appear-here").prepend(gifDiv);
-                        }
+                    }
 
                 });
         });
